@@ -132,10 +132,10 @@ def get_json_for(model_id,grounding_id,query_id,answer_set_id):
     assert (response.status_code == 200)
     return response.json()
 
-def dump_json_to_file(json,filename):
+def dump_json_to_file(json_data,filename):
     with open(filename,"wt") as f:
         print("Saving json in file {}...".format(filename))
-        print(json,file=f)
+        json.dump(json_data,f)
 
 if __name__ == "__main__":
     instal_remote()
