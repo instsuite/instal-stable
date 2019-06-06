@@ -343,25 +343,25 @@ class InstalCompiler(object):
 
             # The 3rd obligation rule
             self.instal_print(
-                "terminated(obl({e},{d},{v}),{inst},I) :-".format(e=e, d=d, v=v, inst=self.names["institution"]))
+                "terminated(obl({e},{d},{v}),{inst},{e},I) :-".format(e=e, d=d, v=v, inst=self.names["institution"]))
             if e_event:
                 self.instal_print("   event({e}), occurred({e},{inst},I),".format(
                     e=e, inst=self.names["institution"]))
             if e_fluent:
                 self.instal_print(
-                    "   fluent({e},{inst}), holdsat({e},{inst},I),".format(e=e, inst=self.names["institution"]))
+                    "   fluent({e},{inst}), holdsat({e},{inst},_,I),".format(e=e, inst=self.names["institution"])) # 20190606 JAP: add arg to holdsat
             if d_event:
                 self.instal_print("   event({d}),".format(d=d))
             if d_fluent:
                 self.instal_print("   fluent({d},{inst}),".format(
                     d=d, inst=self.names["institution"]))
-            self.instal_print("   holdsat(obl({e},{d},{v}),{inst},I),\n"
+            self.instal_print("   holdsat(obl({e},{d},{v}),{inst},_,I),\n" # 20190606 JAP: add arg to holdsat
                               "   event({v}), {te},{td},{tv},inst({inst})."
                               .format(e=e, d=d, v=v, te=te, td=td, tv=tv, inst=self.names["institution"]))
 
             # The fourth obligation rule
             self.instal_print(
-                "terminated(obl({e},{d},{v}),{inst},I) :-".format(e=e, d=d, v=v, inst=self.names["institution"]))
+                "terminated(obl({e},{d},{v}),{inst},{d},I) :-".format(e=e, d=d, v=v, inst=self.names["institution"]))
             if e_event:
                 self.instal_print("   event({e}), ".format(e=e))
             if e_fluent:
@@ -373,7 +373,7 @@ class InstalCompiler(object):
             if d_fluent:
                 self.instal_print(
                     "   fluent({d},{inst}),  holdsat({d},{inst},I),".format(d=d, inst=self.names["institution"]))
-            self.instal_print("   holdsat(obl({e},{d},{v}),{inst},I),\n"
+            self.instal_print("   holdsat(obl({e},{d},{v}),{inst},_,I),\n" # 20190606 JAP: add arg to holdsat
                               "   event({v}), {te},{td},{tv},inst({inst})."
                               .format(e=e, d=d, v=v, te=te, td=td, tv=tv, inst=self.names["institution"]))
 
@@ -384,14 +384,14 @@ class InstalCompiler(object):
                 self.instal_print("   event({e}), ".format(e=e))
             if e_fluent:
                 self.instal_print(
-                    "   fluent({e},{inst}), not holdsat({e}, {inst}, I),".format(e=e, inst=self.names["institution"]))
+                    "   fluent({e},{inst}), not holdsat({e},{inst},_,I),".format(e=e, inst=self.names["institution"])) # 20190606 JAP: add arg to holdsat
             if d_event:
                 self.instal_print("   event({d}), occurred({d},{inst},I),".format(
                     d=d, inst=self.names["institution"]))
             if d_fluent:
                 self.instal_print(
-                    "   fluent({d},{inst}),  holdsat({d},{inst},I),".format(d=d, inst=self.names["institution"]))
-            self.instal_print("   holdsat(obl({e},{d},{v}),{inst},I),\n"
+                    "   fluent({d},{inst}),  holdsat({d},{inst},_,I),".format(d=d, inst=self.names["institution"])) # 20190606 JAP: add arg to holdsat
+            self.instal_print("   holdsat(obl({e},{d},{v}),{inst},_,I),\n" # 20190606 JAP: add arg to holdsat
                               "   event({v}), {te},{td},{tv},inst({inst})."
                               .format(e=e, d=d, v=v, te=te, td=td, tv=tv, inst=self.names["institution"]))
 
@@ -449,10 +449,10 @@ class InstalCompiler(object):
                 self.instal_print(
                     "%\n% Translation of {inev} initiates {inits} if {condition}"
                     .format(inev=self.extendedterm2string(inev), inits=x, condition=cond))
-                self.instal_print("%\ninitiated({inf},{inst},I) :-\n"
+                self.instal_print("%\ninitiated({inf},{inst},{ev},I) :-\n" # 2019604 JAP: added ev
                                   "   occurred({ev},{inst},I),\n"
                                   "   not occurred(viol({ev}),{inst},I),\n"
-                                  "   holdsat(live({inst}),{inst},I), inst({inst}),"
+                                  "   holdsat(live({inst}),{inst},_create_,I),inst({inst})," # 20190606 JAP: add arg to holdsat
                                   .format(inf=self.extendedterm2string(x),
                                           ev=self.extendedterm2string(inev),
                                           inst=self.names["institution"]))
@@ -483,10 +483,10 @@ class InstalCompiler(object):
                 self.instal_print(
                     "%\n% Translation of {inev} terminates {terms} if {condition}"
                     .format(inev=self.extendedterm2string(inev), terms=x, condition=cond))
-                self.instal_print("%\nterminated({inf},{inst},I) :-\n"
+                self.instal_print("%\nterminated({inf},{inst},{ev},I) :-\n" # 2019604 JAP: added ev
                                   "   occurred({ev},{inst},I),\n"
                                   "   not occurred(viol({ev}),{inst},I),\n"
-                                  "   holdsat(live({inst}),{inst},I),inst({inst}),"
+                                  "   holdsat(live({inst}),{inst},_create_,I),inst({inst})," # 20190606 JAP: add arg to holdsat
                                   .format(inf=self.extendedterm2string(x),
                                           ev=self.extendedterm2string(inev),
                                           inst=self.names["institution"]))
@@ -511,7 +511,7 @@ class InstalCompiler(object):
             vars1 = {}
             self.collectVars(nif, vars1)
             self.instal_print("%\n% Translation of {nif} when {ante}\n"
-                              "holdsat({nif},{inst},I) :-"
+                              "holdsat({nif},{inst},nif,I) :-" # 20190606 JAP: add arg to holdsat
                               .format(nif=self.extendedterm2string(nif), ante=ante, inst=self.names["institution"]))
             self.printCondition(ante)
             for k in vars1:
@@ -525,11 +525,11 @@ class InstalCompiler(object):
         self.instal_print("%\n% initially\n%")
         if True:
             self.instal_print("% no creation event")
-            self.instal_print("holdsat(live({inst}),{inst},I) :- start(I), inst({inst})."
+            self.instal_print("holdsat(live({inst}),{inst},_create_,I) :- start(I), inst({inst})." # 20190606 JAP: add arg to holdsat
                               .format(inst=self.names["institution"]))
-            self.instal_print("holdsat(perm(null),{inst},I) :- start(I), inst({inst})."
+            self.instal_print("holdsat(perm(null),{inst},_create_,I) :- start(I), inst({inst})." # 20190606 JAP: add arg to holdsat
                               .format(inst=self.names["institution"]))
-            self.instal_print("holdsat(pow(null),{inst},I) :- start(I), inst({inst})."
+            self.instal_print("holdsat(pow(null),{inst},_create_,I) :- start(I), inst({inst})." # 20190606 JAP: add arg to holdsat
                               .format(inst=self.names["institution"]))
             for inits in initials:
                 [i, cond] = inits
@@ -541,7 +541,7 @@ class InstalCompiler(object):
                     #self.instal_print(
                     #    "% condition: {x}"
                     #    .format(x=self.extendedterm2string(cond)))
-                self.instal_print("holdsat({inf},{inst},I) :- not holdsat(live({inst}),{inst}),"
+                self.instal_print("holdsat({inf},{inst},_create_,I) :- not holdsat(live({inst}),{inst})," # 20190606 JAP: add arg to holdsat
                                   .format(inst=self.names["institution"], inf=self.extendedterm2string(i)))
                 self.collectVars(i, fvars)
                 for k in fvars:
@@ -599,7 +599,7 @@ class InstalCompiler(object):
         elif c[0] == '>=':
             self.instal_print("   {l}>={r},".format(l=c[1][0], r=c[1][1]))
         else:
-            self.instal_print("   holdsat({fluent},{inst},I),"
+            self.instal_print("   holdsat({fluent},{inst},_,I)," # 20190606 JAP: add arg to holdsat
                               .format(fluent=self.extendedterm2string(c), inst=institution))
 
     def term2string(self, p):

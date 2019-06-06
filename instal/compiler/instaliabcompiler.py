@@ -205,7 +205,7 @@ class InstalBridgeCompiler(InstalCompiler):
                 self.instal_print(
                     "%\n% Translation of {sf} of {sinst} xinitiates {x} of {dinst} if {condition}"
                     .format(sf=self.extendedterm2string(sf), x=x, condition=cond, sinst=sinst, dinst=dinst))
-                self.instal_print("%\nxinitiated({sinst}, {x},{dinst},I) :-\n"
+                self.instal_print("%\nxinitiated({sinst}, {x},{dinst},{sf},I) :-\n" # 2019604 JAP: added sf
                                   "   occurred({sf},{sinst},I),\n"
                                   "   holdsat(ipow({sinst}, {x}, {dinst}), {inst}, I), \n"
                                   "   holdsat(live({inst}),{inst},I), bridge({inst}), \n"
@@ -248,7 +248,7 @@ class InstalBridgeCompiler(InstalCompiler):
                 self.instal_print(
                     "%\n% Translation of {sf} of {sinst} xterminates {x} of {dinst} if {condition}"
                     .format(sf=self.extendedterm2string(sf), x=x, condition=cond, sinst=sinst, dinst=dinst))
-                self.instal_print("%\nxterminated({sinst}, {x},{dinst},I) :-\n"
+                self.instal_print("%\nxterminated({sinst}, {x},{dinst},{sf},I) :-\n" # 2019604 JAP: added sf
                                   "   occurred({sf},{sinst},I),\n"
                                   "   holdsat(tpow({sinst}, {x}, {dinst}), {inst}, I), \n"
                                   "   holdsat(live({inst}),{inst},I), bridge({inst}), \n"
