@@ -4,7 +4,7 @@ The Institutional Action Language (InstAL) is a tool for specifying, modelling a
 At the heart of InstAL is Answer Set Programming - institutional definitions are compiled into Answer Set Prolog (AnsProlog.) That AnsProlog program is then solved in different ways based on what operations the user wishes to perform with the institution.
 
 # Installation Instructions
-Installation instructions are available in README.md
+Installation instructions are available in INSTALLATION.md
 
 # Running InstAL
 There are three executable InstAL scripts in this directory:
