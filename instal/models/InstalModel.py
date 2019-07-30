@@ -137,7 +137,7 @@ class InstalModel(metaclass=ABCMeta):
             INSTAL_STANDARD_PRELUDE, file_extension=".lp", delete=True)
 
         self.model_files = self.get_model_files(ial_files, bridge_files) + [temporary_text_file(l.read(),file_extension=".lp", delete=True) for l in lp_files]
-        print(self.model_files)
+
         self.domain_facts = self.get_domains(domain_files)
 
         self.initial_facts = self.get_initial(fact_files)
