@@ -4,7 +4,7 @@ appdirs==1.4.3
 astroid==1.4.9
 autopep8==1.2.4
 billiard==3.5.0.2
-celery==4.0.2
+celery==5.2.2
 certifi==2017.4.17
 chardet==3.0.3
 click==6.7
