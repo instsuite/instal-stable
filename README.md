@@ -14,8 +14,13 @@ There are three executable InstAL scripts in this directory:
 
 All three of these scripts have help functionality. Append "--help" to the script on the command line.
 
+# Using Dockerfile
+see ReadMe: [https://github.com/instsuite/instal-stable-docker](https://github.com/instsuite/instal-stable-docker)
+
 # Further information & Instructions
 More InstAL information is available from http://instsuite.github.io/
 
 # Tests
 You can run the tests in the firstprinciples/ directory using the script ./ts. This by default will run the tests locally. Set the environment variable INSTAL_NOSE_API_URL to use an instance of InstAL-REST.
+
+
